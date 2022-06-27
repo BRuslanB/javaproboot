@@ -1,7 +1,7 @@
 package kz.bitlab.javapro.javaproboot.controllers;
 
 import kz.bitlab.javapro.javaproboot.model.Car;
-import kz.bitlab.javapro.javaproboot.repository.CarRepository;
+import kz.bitlab.javapro.javaproboot.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +16,11 @@ import java.util.List;
 public class HomeController {
 
     @Autowired
-    private CarRepository carRepository;
+    private CarService carService;
 
     @GetMapping(value = "/")
     public String indexPage(Model model){
-        List<Car> cars = carRepository.findAll();
+        List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
         return "indexpage";
     }
@@ -36,20 +36,14 @@ public class HomeController {
                          @RequestParam(name = "car_price") int price,
                          @RequestParam(name = "car_engine_volume") double engine_volume){
 
-        Car car = new Car();
-        car.setName(name);
-        car.setModel(model);
-        car.setPrice(price);
-        car.setEngineVolume(engine_volume);
-
-        carRepository.save(car);
-        return "redirect:/addcar";
+        carService.addCar(new Car(null,name,model, price, engine_volume));
+        return "redirect:/";
     }
 
     @GetMapping(value = "/details/{id}")
     public String details(@PathVariable(name="id") Long id,
                           Model model){
-        Car car = carRepository.getReferenceById(id);
+        Car car = carService.getCar(id);
         model.addAttribute("car", car);
         return "details";
     }
@@ -61,24 +55,26 @@ public class HomeController {
                          @RequestParam(name = "car_price") int price,
                          @RequestParam(name = "car_engine_volume") double engine_volume){
 
-        Car car = carRepository.findById(id).orElse(null);
+        Car car = carService.getCar(id);
+
         if (car != null){
             car.setName(name);
             car.setModel(model);
             car.setPrice(price);
             car.setEngineVolume(engine_volume);
-
-            carRepository.save(car);
-            return "redirect:/details/" + id;
+            carService.saveCar(car);
         };
-
         return "redirect:/";
     }
 
     @PostMapping(value = "/deletecar")
     public String deleteCar(@RequestParam(name = "car_id") Long id){
 
-        carRepository.deleteById(id);
+        Car car = carService.getCar(id);
+
+        if (car != null){
+            carService.deleteCar(car);
+        }
         return "redirect:/";
     }
 }
