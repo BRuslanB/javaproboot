@@ -1,10 +1,11 @@
-package kz.bitlab.javapro.javaproboot.model;
+package kz.bitlab.javapro.javaproboot.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "t_cars")
@@ -30,4 +31,9 @@ public class Car {
     @Column(name="engine_volume")
     private double engineVolume;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Country country;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Category> categories;
 }

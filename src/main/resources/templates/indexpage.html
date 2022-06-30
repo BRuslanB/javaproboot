@@ -11,6 +11,8 @@
                         <td th:text="#{label.model}"></td>
                         <td th:text="#{label.price}"></td>
                         <td th:text="#{label.engineVolume}"></td>
+                        <td th:text="#{label.country}"></td>
+                        <td th:text="#{label.category}"></td>
                         <td width="10%" th:text="#{label.details}"></td>
                     </tr>
                 </thead>
@@ -21,6 +23,10 @@
                         <td th:text="${car.model}"></td>
                         <td th:text="${car.price}"></td>
                         <td th:text="${car.engineVolume}"></td>
+                        <td th:text="${car.country.id != null ? car.country.name + '-' + car.country.code : '-----'}"></td>
+                        <td>
+                            <span th:each="cat : ${car.categories}" th:text="${cat.name}" style="display: block;"></span>
+                        </td>
                         <td>
                             <a th:href="@{'/details/' + ${car.id}}" class="btn btn-primary btn-sm"
                                th:text="#{button.details}"></a>

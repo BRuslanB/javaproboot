@@ -54,6 +54,20 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-12">
+                                <label th:text="#{label.country}"></label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <select class="form-select" name="car_country_id" required>
+                                    <option th:each="cnt : ${countries}" th:text="${cnt.name} + '-' + ${cnt.code}"
+                                        th:value="${cnt.id}" th:selected=
+                                        "${car!=null && car.country!=null && car.country.id==cnt.id}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
                                 <button class="btn btn-success" th:text="#{button.saveCar}"></button>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-danger ms-2"
@@ -88,6 +102,48 @@
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+            <!-- Selected categories List -->
+            <div class="row mt-3">
+                <div class="col-6 offset-3">
+                    <h4 class="text-center" th:if="${not #lists.isEmpty(car.categories)}"
+                        th:text="#{label.selectedCategory}"></h4>
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr th:each="cat : ${car.categories}">
+                            <form th:action="@{'/reassigncategory'}" method="post">
+                                <input type="hidden" th:value="${car.id}" name="car_id">
+                                <input type="hidden" th:value="${cat.id}" name="car_category_id">
+                                <td th:text="${cat.name}"></td>
+                                <td width="10%">
+                                    <button class="btn btn-danger btn-sm"> - </button>
+                                </td>
+                            </form>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Available categories List -->
+            <div class="row mt-3">
+                <div class="col-6 offset-3">
+                    <h4 class="text-center" th:if="${categories}"
+                        th:text="#{label.availableCategory}"></h4>
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr th:each="cat : ${categories}">
+                                <form th:action="@{'/assigncategory'}" method="post">
+                                    <input type="hidden" th:value="${car.id}" name="car_id">
+                                    <input type="hidden" th:value="${cat.id}" name="car_category_id">
+                                    <td th:text="${cat.name}"></td>
+                                    <td width="10%">
+                                        <button class="btn btn-success btn-sm"> + </button>
+                                    </td>
+                                </form>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

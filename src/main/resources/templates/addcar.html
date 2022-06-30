@@ -47,6 +47,19 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">
+                            <label th:text="#{label.country}"></label>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <select class="form-select" name="car_country_id" required>
+                                <option th:each="cnt : ${countries}" th:text="${cnt.name} + '-' + ${cnt.code}"
+                                        th:value="${cnt.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
                             <button class="btn btn-success" th:text="#{button.addCar}"></button>
                         </div>
                     </div>
